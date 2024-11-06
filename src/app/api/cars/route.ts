@@ -18,15 +18,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: 'Car added successfully!' });
 }
 
-export async function loadCars() {
-    const client = await connectDatabase();
-    try {
-        for (const car of cars) {
-            await insertDocument(client, 'cars', car);
-        }
-    } catch (error) {
-        console.log(error);
-    } finally {
-        await client.close();
-    }
-}
+// export async function loadCars() {
+//     const client = await connectDatabase();
+//     try {
+//         for (const car of cars) {
+//             await insertDocument(client, 'cars', car);
+//         }
+//     } catch (error) {
+//         console.log(error);
+//     } finally {
+//         await client.close();
+//     }
+// }

@@ -9,6 +9,6 @@ export async function DELETE(request: NextRequest, { params }: { params: any }) 
         return NextResponse.json({ message: 'Car deleted successfully!' });
     }
     catch (error : any) {
-        return NextResponse.json({ error: error.message });
+        return NextResponse.json({ message : "error" });
     }
 }
