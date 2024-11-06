@@ -20,12 +20,15 @@ export async function connectDatabase() {
 
 export async function insertDocument(client: any, collection: string, document: object) {
     const db = client.db('db1');
+    console.log(collection);
+    
     const result = await db.collection(collection).insertOne(document);
     return result;
 }
 
 export async function getAllDocuments(client: any, collection: string) {
     const db = client.db('db1');
+    console.log(collection);
     const documents = await db.collection(collection).find().toArray();
     return documents;
  }
