@@ -1,21 +1,22 @@
 import { NextResponse } from "next/server";
 import { getAllDocuments, connectDatabase, insertDocument } from "@/services/mongo";
-import cars from "./cars";
 
-export async function GET(request: Request) {
+export async function GET(request : Request,  { params }: { params: any }){
+    const { category } = params;
     const client = await connectDatabase();
-    const cars = await getAllDocuments(client, 'cars');
+    const products = await getAllDocuments(client, category);
     await client.close();
-    console.log(cars);
-    return NextResponse.json(cars);
+    console.log(products);
+    return NextResponse.json(products);
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request,  { params }: { params: any }){
+    const { category } = params;
     const client = await connectDatabase();
-    const newCar = await request.json();
-    await insertDocument(client, 'cars', newCar);
+    const newProduct = await request.json();
+    await insertDocument(client, category, newProduct);
     await client.close();
-    return NextResponse.json({ message: 'Car added successfully!' });
+    return NextResponse.json({ message: 'product added successfully!' });
 }
 
 // export async function loadCars() {
