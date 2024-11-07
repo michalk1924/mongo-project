@@ -20,8 +20,6 @@ export async function connectDatabase() {
 
 export async function insertDocument(client: any, collection: string, document: object) {
     const db = client.db('db1');
-    console.log(collection);
-    
     const result = await db.collection(collection).insertOne(document);
     return result;
 }
@@ -39,3 +37,14 @@ export async function getAllDocuments(client: any, collection: string) {
     return result;
  }
  
+
+ export async function updateDocument(client: any, collection: string, id: number, updatedDocument: object){
+    const db = client.db('db1');
+    console.log(id, updatedDocument);
+    
+    const result = await db.collection(collection).updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updatedDocument }
+    );
+    return result;
+ }

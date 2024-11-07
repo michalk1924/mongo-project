@@ -3,20 +3,15 @@
 import React, { useEffect, useState } from 'react';
 import booksService from '../../services/books';
 import styles from './books.module.css';
-// import { ClipLoader } from 'react-spinners';
 import AddBook from './addBook/page';
 import { FaRegWindowClose } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 export interface Book {
-    id: number;
+    _id: number;
     title: string;
     price: string;
     image: string;
-}
-
-interface AddBookProps {
-    handleAddBook: (book: Book) => void;
 }
 
 function Page() {
@@ -25,20 +20,21 @@ function Page() {
     const [showAddBookForm, setShowAddBookForm] = useState<boolean>(false);
 
     useEffect(() => {
+        const fetchBooks = async () => {
+            setLoading(true);
+            try {
+                const data = await booksService.getAllBooks();
+                setBooks(data);
+                console.log(data);
+                
+            } catch (error: any) {
+                console.log("Error fetching books:", error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchBooks();
     }, []);
-
-    const fetchBooks = async () => {
-        setLoading(true);
-        try {
-            const data = await booksService.getAllBooks();
-            setBooks(data);
-        } catch (error: any) {
-            console.log("Error fetching books:", error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleAddBook = async (newBook: Book) => {
         try {
@@ -51,13 +47,14 @@ function Page() {
     };
 
     const toggleAddBookForm = () => {
-        setShowAddBookForm((prevState) => !prevState);
+        setShowAddBookForm(prevState => !prevState);
     };
 
     const handleDeleteBook = async (id: number) => {
         try {
+            console.log(id);
             await booksService.deleteBook(id);
-            setBooks((books) => books.filter((book) => book.id !== id));
+            setBooks(books => books.filter(book => book._id !== id));
         } catch (error: any) {
             console.log("Error deleting book:", error.message);
         }
@@ -67,18 +64,20 @@ function Page() {
         <div>
             {loading ? (
                 <div>
-                    {/* <ClipLoader color="orange" loading={loading} size={50} /> */}
+                    <p>Loading books...</p>
                 </div>
             ) : (
                 <div>
                     <h2 className={styles.title}>BOOKS</h2>
                     <div className={styles.prodContainer}>
                         {books.map((product) => (
-                            <div key={product.id} className={styles.prod}>
+                            <div key={product._id} className={styles.prod}>
                                 <h4>{product.title}</h4>
                                 <p>Price: ${product.price}</p>
                                 <img src={product.image} alt={product.title} />
-                                <button onClick={() => handleDeleteBook(product?.id)}><MdDelete /></button>
+                                <button onClick={() => handleDeleteBook(product._id)}>
+                                    <MdDelete />
+                                </button>
                             </div>
                         ))}
                     </div>
